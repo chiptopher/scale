@@ -35,5 +35,10 @@ const Container = styled.label`
 
         border-radius: 8px;
         border: solid 1px ${styles.fontColor};
+
+        @media (max-width: ${styles.breakpoints.mobile}px) {
+            font-size: 1;
+            width: 5rem;
+        }
     }
 `;

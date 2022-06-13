@@ -2,6 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import styles from '../styles';
+
 interface Props {
     children: React.ReactNode;
 }
@@ -24,4 +26,8 @@ const Container = styled.div`
         5px 10px 12.6px -2.5px hsl(var(--shadow-color) / 0.36);
     border-radius: 8px;
     padding: 1rem;
+
+    @media (max-width: ${styles.breakpoints.mobile}px) {
+        padding: 0.5rem;
+    }
 `;
