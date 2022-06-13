@@ -1,7 +1,7 @@
 {
   "name": "scale",
   "version": "0.1.0",
-  "homepage": "https://chiptopher.github.io/scale",
+  "homepage": "https://scale.chrismboyer.com",
   "private": false,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
@@ -19,8 +19,6 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "lint": "eslint .",
@@ -54,7 +52,6 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.30.0",
     "eslint-plugin-typescript-sort-keys": "^2.1.0",
-    "eslint-plugin-unused-imports": "^2.0.0",
-    "gh-pages": "^4.0.0"
+    "eslint-plugin-unused-imports": "^2.0.0"
   }
 }
