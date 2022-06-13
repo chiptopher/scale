@@ -115,7 +115,10 @@ const Container = styled.div`
     }
 
     main {
-        padding-top: 2rem;
+        padding: 2rem 1rem 0 1rem;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
     }
 
     footer {
