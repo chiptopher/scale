@@ -91,7 +91,6 @@ function App() {
                             &copy; {new Date().getFullYear()} Christopher M.
                             Boyer
                         </a>
-                        <span className="face">ಠ_ಠ</span>
                     </li>
                 </ul>
             </footer>
