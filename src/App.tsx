@@ -1,75 +1,98 @@
-import { useState } from 'react';
-
-import styled from 'styled-components';
-
-import { HoverContainer } from './comopnents/hover-container';
-import { Input } from './comopnents/input';
+import { useMemo, useState } from 'react';
 
 function App() {
-    const [fromWidth, setFromWidth] = useState<number | null>(null);
-    const [fromHeight, setFromHeight] = useState<number | null>(null);
+    const [fromWidth, setFromWidth] = useState<string>('');
+    const [fromHeight, setFromHeight] = useState<string>('');
 
-    const [toWidth, setToWidth] = useState<number | null>(null);
-    const [toHeight, setToHeight] = useState<number | null>(null);
+    const [toWidth, setToWidth] = useState<string>('');
+    const [toHeight, setToHeight] = useState<string>('');
 
-    const [divisor, setDivisor] = useState<number | null>(null);
+    const divisor = useMemo((): string => {
+        const hasUnsetValue = [fromWidth, fromHeight, toWidth, toHeight]
+            .map(parseFloat)
+            .includes(NaN);
 
-    const clear = () => {
-        setToWidth(null);
-        setToHeight(null);
-        setDivisor(null);
+        return hasUnsetValue
+            ? ''
+            : (parseFloat(toWidth) / parseFloat(fromWidth)).toFixed(2);
+    }, [fromWidth, fromHeight, toWidth, toHeight]);
+
+    const scale = parseFloat(fromHeight) / parseFloat(fromWidth);
+
+    const clearTo = () => {
+        setToWidth('');
+        setToHeight('');
+    };
+
+    const clearFrom = () => {
+        setFromWidth('');
+        setFromHeight('');
     };
 
     return (
-        <Container>
+        <div className="container">
             <main>
-                <HoverContainer>
-                    <Input
-                        label="Width"
-                        onChange={e => setFromWidth(parseInt(e.target.value))}
-                        value={fromWidth || ''}
-                    />
-                    <Input
-                        label="Height"
-                        onChange={e => setFromHeight(parseInt(e.target.value))}
-                        value={fromHeight || ''}
-                    />
-                </HoverContainer>
-                <p className="scales-to">Scales To</p>
-                <HoverContainer>
-                    <Input
-                        label="Width"
-                        onChange={e => {
-                            const newWidth = parseInt(e.target.value);
-                            setToWidth(newWidth);
-                            if (fromWidth && fromHeight) {
-                                const divisor = newWidth / fromWidth;
-                                setDivisor(divisor);
-                                setToHeight(fromHeight * divisor);
-                            }
-                        }}
-                        onFocus={clear}
-                        value={toWidth || ''}
-                    />
-                    <Input
-                        label="Height"
-                        onChange={e => {
-                            const newHeight = parseInt(e.target.value);
-                            setToHeight(newHeight);
-                            if (fromWidth && fromHeight) {
-                                const divisor = newHeight / fromHeight;
-                                setDivisor(divisor);
-                                setToWidth(fromWidth * divisor);
-                            }
-                        }}
-                        onFocus={clear}
-                        value={toHeight || ''}
-                    />
-                </HoverContainer>
-                <p>
-                    <span>Scale</span>&nbsp;
-                    {divisor}
-                </p>
+                <h1>Dimensions Scale</h1>
+                <div className="from">
+                    <div className="inputs">
+                        <input
+                            onChange={e => setFromWidth(e.currentTarget.value)}
+                            type="number"
+                            value={fromWidth}
+                        />
+                        <span>x</span>
+                        <input
+                            onChange={e => setFromHeight(e.currentTarget.value)}
+                            type="number"
+                            value={fromHeight}
+                        />
+                    </div>
+                    <div>
+                        <button
+                            onClick={() => {
+                                clearTo();
+                                clearFrom();
+                            }}
+                        >
+                            Clear
+                        </button>
+                    </div>
+                </div>
+                <div className="result">
+                    <span className="title">Scales to:</span>
+                    <div className="inputs">
+                        <input
+                            onChange={e => {
+                                setToWidth(e.currentTarget.value);
+                                setToHeight(
+                                    (
+                                        parseFloat(e.currentTarget.value) *
+                                        scale
+                                    ).toString()
+                                );
+                            }}
+                            onFocus={() => clearTo()}
+                            type="number"
+                            value={toWidth}
+                        />
+                        <span>x</span>
+                        <input
+                            onChange={e => {
+                                setToHeight(e.currentTarget.value);
+                                setToWidth(
+                                    (
+                                        parseFloat(e.currentTarget.value) /
+                                        scale
+                                    ).toString()
+                                );
+                            }}
+                            onFocus={() => clearTo()}
+                            type="number"
+                            value={toHeight}
+                        />
+                    </div>
+                    <span>Scale: {divisor}</span>
+                </div>
             </main>
             <footer>
                 <ul>
@@ -94,45 +117,8 @@ function App() {
                     </li>
                 </ul>
             </footer>
-        </Container>
+        </div>
     );
 }
 
 export default App;
-
-const Container = styled.div`
-    background-color: #f5f5f5;
-    display: flex;
-    flex-direction: column;
-    width: 100vw;
-    height: 100vh;
-    justify-content: space-between;
-    align-items: center;
-
-    p {
-        font-size: 2rem;
-    }
-
-    main {
-        padding: 2rem 1rem 0 1rem;
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-    }
-
-    footer {
-        font-size: 1rem;
-        text-align: center;
-
-        ul {
-            list-style: none;
-
-            li {
-                margin-top: 1rem;
-            }
-        }
-        .face {
-            margin-left: 2rem;
-        }
-    }
-`;
