@@ -29,6 +29,8 @@ function App() {
         setFromHeight('');
     };
 
+    const [scaleBy, setScaleBy] = useState<'pixels' | 'multiplier'>('pixels');
+
     return (
         <div className="container">
             <main>
@@ -91,7 +93,10 @@ function App() {
                             value={toHeight}
                         />
                     </div>
-                    <span>Scale: {divisor}</span>
+                    <div>
+                        <span>Scale: </span>
+                        <input type="number" value={divisor} />
+                    </div>
                 </div>
             </main>
             <footer>
