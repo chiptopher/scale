@@ -10,6 +10,15 @@ function App() {
             <main>
                 <h1>Dimensions Scale</h1>
                 <div className="from">
+                    <div>
+                        <button
+                            onClick={() => {
+                                setCalculator(new Calculator({}));
+                            }}
+                        >
+                            Clear
+                        </button>
+                    </div>
                     <div className="inputs">
                         <input
                             onChange={e =>
@@ -42,15 +51,6 @@ function App() {
                                     : calculator.data.fromHeight || ''
                             }
                         />
-                    </div>
-                    <div>
-                        <button
-                            onClick={() => {
-                                setCalculator(new Calculator({}));
-                            }}
-                        >
-                            Clear
-                        </button>
                     </div>
                 </div>
                 <div className="result">
