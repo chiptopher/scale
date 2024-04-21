@@ -1,33 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
+
+import { Calculator } from './data';
 
 function App() {
-    const [fromWidth, setFromWidth] = useState<string>('');
-    const [fromHeight, setFromHeight] = useState<string>('');
-
-    const [toWidth, setToWidth] = useState<string>('');
-    const [toHeight, setToHeight] = useState<string>('');
-
-    const divisor = useMemo((): string => {
-        const hasUnsetValue = [fromWidth, fromHeight, toWidth, toHeight]
-            .map(parseFloat)
-            .includes(NaN);
-
-        return hasUnsetValue
-            ? ''
-            : (parseFloat(toWidth) / parseFloat(fromWidth)).toFixed(2);
-    }, [fromWidth, fromHeight, toWidth, toHeight]);
-
-    const scale = parseFloat(fromHeight) / parseFloat(fromWidth);
-
-    const clearTo = () => {
-        setToWidth('');
-        setToHeight('');
-    };
-
-    const clearFrom = () => {
-        setFromWidth('');
-        setFromHeight('');
-    };
+    const [calculator, setCalculator] = useState(new Calculator({}));
 
     return (
         <div className="container">
@@ -36,22 +12,41 @@ function App() {
                 <div className="from">
                     <div className="inputs">
                         <input
-                            onChange={e => setFromWidth(e.currentTarget.value)}
+                            onChange={e =>
+                                setCalculator(
+                                    calculator.setFromWidth(
+                                        parseFloat(e.currentTarget.value)
+                                    )
+                                )
+                            }
                             type="number"
-                            value={fromWidth}
+                            value={
+                                calculator.data.fromWidth === 0
+                                    ? 0
+                                    : calculator.data.fromWidth || ''
+                            }
                         />
                         <span>x</span>
                         <input
-                            onChange={e => setFromHeight(e.currentTarget.value)}
+                            onChange={e =>
+                                setCalculator(
+                                    calculator.setFromHeight(
+                                        parseFloat(e.currentTarget.value)
+                                    )
+                                )
+                            }
                             type="number"
-                            value={fromHeight}
+                            value={
+                                calculator.data.fromHeight === 0
+                                    ? 0
+                                    : calculator.data.fromHeight || ''
+                            }
                         />
                     </div>
                     <div>
                         <button
                             onClick={() => {
-                                clearTo();
-                                clearFrom();
+                                setCalculator(new Calculator({}));
                             }}
                         >
                             Clear
@@ -62,36 +57,55 @@ function App() {
                     <span className="title">Scales to:</span>
                     <div className="inputs">
                         <input
-                            onChange={e => {
-                                setToWidth(e.currentTarget.value);
-                                setToHeight(
-                                    (
-                                        parseFloat(e.currentTarget.value) *
-                                        scale
-                                    ).toString()
-                                );
-                            }}
-                            onFocus={() => clearTo()}
+                            onChange={e =>
+                                setCalculator(
+                                    calculator.setToWidth(
+                                        parseFloat(e.currentTarget.value)
+                                    )
+                                )
+                            }
                             type="number"
-                            value={toWidth}
+                            value={
+                                calculator.data.toWidth === 0
+                                    ? 0
+                                    : calculator.data.toWidth || ''
+                            }
                         />
                         <span>x</span>
                         <input
-                            onChange={e => {
-                                setToHeight(e.currentTarget.value);
-                                setToWidth(
-                                    (
-                                        parseFloat(e.currentTarget.value) /
-                                        scale
-                                    ).toString()
-                                );
-                            }}
-                            onFocus={() => clearTo()}
+                            onChange={e =>
+                                setCalculator(
+                                    calculator.setToHeight(
+                                        parseFloat(e.currentTarget.value)
+                                    )
+                                )
+                            }
                             type="number"
-                            value={toHeight}
+                            value={
+                                calculator.data.toHeight === 0
+                                    ? 0
+                                    : calculator.data.toHeight || ''
+                            }
                         />
                     </div>
-                    <span>Scale: {divisor}</span>
+                    <div>
+                        <span>Scale: </span>
+                        <input
+                            onChange={e => {
+                                setCalculator(
+                                    calculator.setScale(
+                                        parseFloat(e.currentTarget.value)
+                                    )
+                                );
+                            }}
+                            type="number"
+                            value={
+                                calculator.data.scale === 0
+                                    ? 0
+                                    : calculator.data.scale || ''
+                            }
+                        />
+                    </div>
                 </div>
             </main>
             <footer>
